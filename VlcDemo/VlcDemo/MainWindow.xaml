@@ -1,0 +1,33 @@
+﻿<Window x:Class="VlcDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="tbUrl" Margin="10,10,0,10" />
+            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                <Button x:Name="btnPlay" Content="Play" VerticalAlignment="Center" Margin="10,0,0,0" Width="60"
+                        Click="btnPlay_Click" />
+                <Button x:Name="btnStop" Content="Stop" VerticalAlignment="Center" Margin="10,0,0,0" Width="60"
+                        Click="btnStop_Click" />
+            </StackPanel>
+            <Button x:Name="btnSnapshot" Grid.Column="2" Content="Snapshot" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,10,0" Width="60"
+                Click="btnSnapshot_Click" />
+        </Grid>
+        <vlc:VlcControl x:Name="vlcControl" Grid.Row="1" />
+        <TextBlock x:Name="txtWatermark" Grid.Row="1" Text="Hello World" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9" FontSize="16" />
+        
+        <Slider x:Name="timeSlider" Grid.Row="2" IsMoveToPointEnabled="True" />
+    </Grid>
+</Window>
