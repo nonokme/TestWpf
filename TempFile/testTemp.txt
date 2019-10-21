@@ -1,0 +1,145 @@
+class Program
+    {
+        #region task与thread的区别
+        //0.异步是相对同步来说的一个目的，而多线程是实现这个目的一种技术方法
+        //1.task与thread对比，task相当于应用层，thread更底层，但二者是不一样的，没有隶属关系
+        //2.task是在线程池上创建，是后台线程（主线程不会等其完成）；Thread是单个线程，默认是前台线程
+        //3.task可以直接获取返回值，thread不能直接从方法返回结果（可以使用变量来获取结果）
+        //4.使用task.ContinueWith（）方法可以继续执行其他任务。线程中无连续性，当线程完成工作时，不能告诉线程开始其他操作。 尽管可以使用Join（）等待线程完成，但是这会阻塞主线程
+        //5.task借助CancellationTokeSource类可以支持任务中的取消，当thread处于运行中时，无法取消它
+        //6.task能方便捕捉到运行中的异常，thread在父方法中无法捕捉到异常
+        #endregion
+
+        #region 示例一 基本任务
+        public static void Main()
+        {
+            // Start the HandleFile method.
+            Task<int> task = HandleFileAsync();
+
+            // Control returns here before HandleFileAsync returns.
+            // ... Prompt the user.
+            Console.WriteLine("Please wait patiently " +
+                "while I do something important.");
+
+            // Do something at the same time as the file is being read.
+            string line = Console.ReadLine();
+            Console.WriteLine("You entered (asynchronous logic): " + line);
+
+            // Wait for the HandleFile task to complete.
+            // ... Display its results.
+            task.Wait();//有调用.result时，这里可以省略。在没有调用.result时，一定要.wait()下，这个话题涉及到当task运行出现异常时：为什么要调用Wait或者Result？或者一直不查询Task的Exception属性？你的代码就永远注意不到这个异常的发生，如果不能捕捉到这个异常，垃圾回收时，抛出AggregateException，进程就会立即终止，这就是“牵一发动全身”，莫名其妙程序就自己关掉了
+            var x = task.Result;//其实在用Result的时候，内部会调用Wait
+            Console.WriteLine("Count: " + x);
+
+            Console.WriteLine("[DONE]");
+            Console.ReadLine();
+        }
+
+        static async Task<int> HandleFileAsync()
+        {
+            string file = @"C:\enable1.txt";
+            Console.WriteLine("HandleFile enter");
+            int count = 0;
+
+            // Read in the specified file.
+            // ... Use async StreamReader method.
+            using (StreamReader reader = new StreamReader(file))
+            {
+                string v = await reader.ReadToEndAsync();
+                //string v = reader.ReadToEnd();
+
+                // ... Process the file data somehow.
+                count += v.Length;
+
+                // ... A slow-running computation.
+                //     Dummy code.
+                for (int i = 0; i < 10000; i++)
+                {
+                    int x = v.GetHashCode();
+                    if (x == 0)
+                    {
+                        count--;
+                    }
+                }
+            }
+            Console.WriteLine("HandleFile exit");
+            return count;
+        }
+
+        #endregion
+
+        #region 示例二 连续任务
+        static void Main()
+        {
+            // Call async method 10 times.
+            for (int i = 0; i < 10; i++)
+            {
+                Run2Methods(i);
+            }
+            // The calls are all asynchronous, so they can end at any time.
+            Console.ReadLine();
+        }
+
+        static async void Run2Methods(int count)
+        {
+            // Run a Task that calls a method, then calls another method with ContinueWith.
+            int result = await Task.Run(() => GetSum(count))
+                .ContinueWith(task => MultiplyNegative1(task));
+            Console.WriteLine("Run2Methods result: " + result);
+        }
+
+        static int GetSum(int count)
+        {
+            // This method is called first, and returns an int.
+            int sum = 0;
+            for (int z = 0; z < count; z++)
+            {
+                sum += (int)Math.Pow(z, 2);
+            }
+            return sum;
+        }
+
+        static int MultiplyNegative1(Task<int> task)
+        {
+            // This method is called second, and returns a negative int.
+            return task.Result * -1;
+        }
+        #endregion
+
+
+        #region 示例三：任务的取消
+        static void Main(string[] args)
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                Task task = new Task(() => { LongRunningTask(cts.Token); });
+                task.Start();
+                Console.WriteLine("Operation Performing...");
+                if (Console.ReadKey().Key == ConsoleKey.C)
+                {
+                    Console.WriteLine("Cancelling..");
+                    cts.Cancel();
+                }
+                Console.Read();
+            }
+        }
+        private static void LongRunningTask(CancellationToken token)
+        {
+            for (int i = 0; i < 10000000; i++)
+            {
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine(i);
+                }
+            }
+        }
+
+        #endregion
+
+
+
+    }
