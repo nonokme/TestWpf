@@ -1,0 +1,122 @@
+    <Window.Resources>
+	<!--控件模板-->
+        <Style TargetType="ListBoxItem" x:Key="ItemStyle">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Grid Background="Transparent" Margin="{Binding ConverterParameter='0,5,0,5',Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateMarginConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter Name="listItemContent" MouseLeftButtonDown="listItemContent_MouseLeftButtonDown"/>
+                            <buttons:VectorButton  x:Name="RemoveBtn" Grid.Column="1" VerticalAlignment="Center" Margin="{Binding ConverterParameter='20,0,20,0',Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateMarginConverter}}" ToolTip="{DynamicResource PS_FavoriteViewWindow_Delete}" 
+                                                  Command="{Binding DataContext.RemoveCommand,RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
+                                                   Height="{Binding ConverterParameter=28,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}"
+                                                Width="{Binding ConverterParameter=28,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}"
+                                                   Data="M0,0 L10,10 M10,0 L0,10" Stroke="{DynamicResource White}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+<!--数据模板-->
+        <DataTemplate x:Key="FavorItemDataTemplate" DataType="models:FavorGroupMember">
+            <Grid Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Grid.Column="0" x:Name="Img" Stretch="None" Height="{Binding ConverterParameter=48,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Width="{Binding ConverterParameter=48,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Source="../Resource/treeico_terminal_online.png"/>
+                <TextBlock  Background="Transparent" Grid.Column="1" Text="{Binding Caption}"  FontSize="{Binding ConverterParameter=28,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Foreground="{DynamicResource White}" Margin="{Binding ConverterParameter='10,0,0,0',Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateMarginConverter}}"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            </Grid>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding NumberType}" Value="Car">
+                    <Setter TargetName="Img" Property="Source" Value="{DynamicResource car1}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding NumberType}" Value="SmartOneApp">
+                    <Setter TargetName="Img" Property="Source" Value="{DynamicResource people}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding NumberType}" Value="Staff">
+                    <Setter TargetName="Img" Property="Source" Value="{DynamicResource people}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding NumberType}" Value="Group">
+                    <Setter TargetName="Img" Property="Source" Value="{DynamicResource calling_group}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding NumberType}" Value="Telephone">
+                    <Setter TargetName="Img" Property="Source" Value="{DynamicResource people}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding NumberType}" Value="Mobile">
+                    <Setter TargetName="Img" Property="Source" Value="{DynamicResource people}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding NumberType}" Value="VideoCall">
+                    <Setter TargetName="Img" Property="Source" Value="../../Resource/Phone_Icon_On.png"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding NumberType}" Value="Recorder">
+                    <Setter TargetName="Img" Property="Source" Value="{DynamicResource recorder}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding NumberType}" Value="Interphone">
+                    <Setter TargetName="Img" Property="Source" Value="{DynamicResource people}"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <Style x:Key="btnStyle" TargetType="{x:Type Button}">
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Name="grid" Background="{TemplateBinding Background}">
+                            <TextBlock Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Background="{TemplateBinding Background}" Style="{DynamicResource WhiteTextH4Style}"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="grid" Property="Background" Value="{DynamicResource SelectBlue1}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="grid" Property="Background" Value="{DynamicResource SelectBlue1}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+	
+	<Grid Name="gridWin" Width="{Binding ConverterParameter=660,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Height="{Binding ConverterParameter=540,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}">
+        <lightBorder:LightBorder ColorStyle="0" Width="{Binding ConverterParameter=660,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Height="{Binding ConverterParameter=540,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" BackgroundOpacity="0.5"></lightBorder:LightBorder>
+        <Grid Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{Binding ConverterParameter=80,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="{Binding ConverterParameter=120,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderBrush="{DynamicResource Blue1}" BorderThickness="0,0,0,1">
+                <TextBox Name="MeetingName" Background="Transparent" IsReadOnly="True" Margin="2"  MouseDoubleClick="MeetingName_MouseDoubleClick" LostFocus="MeetingName_LostFocus"  Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" FontSize="{Binding ConverterParameter=28,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Width="{Binding ConverterParameter=660,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Height="{Binding ConverterParameter=80,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}"  Foreground="{DynamicResource White}" CaretBrush="{DynamicResource White}" VerticalAlignment="Center" HorizontalAlignment="Left">
+                </TextBox>
+                
+            </Border>
+            
+            <Border Grid.Row="2" BorderBrush="{DynamicResource Blue1}" BorderThickness="0,0,0,1">
+			<!--主要内容-->
+                <ListBox Name="listbox" Background="Transparent" ScrollViewer.CanContentScroll="True" Margin="{Binding ConverterParameter='3,3,3,3',Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateMarginConverter}}" BorderThickness="0" ItemsSource="{Binding FavorList}" ItemTemplate="{StaticResource FavorItemDataTemplate}"  AllowDrop="True" Drop="EditCallGroupWindow_Drop" ItemContainerStyle="{StaticResource ItemStyle}">
+                </ListBox>
+            </Border>
+            <Grid Grid.Row="3" Background="Transparent">
+                <Grid Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="{Binding ConverterParameter='3,0,3,0',Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateMarginConverter}}" Content="{DynamicResource M_Area_Cancle}" Click="Button_Click" Background="Transparent" Width="{Binding ConverterParameter=260,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Height="{Binding ConverterParameter=70,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Style="{StaticResource btnStyle}"></Button>
+                    <Button Grid.Column="1" Margin="{Binding ConverterParameter='3,0,3,0',Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateMarginConverter}}" Content="{DynamicResource M_Area_Save}" Command="{Binding SubmitCommand}" Background="Transparent" Width="{Binding ConverterParameter=260,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" Height="{Binding ConverterParameter=70,Source={x:Static clientConfig:ConfigManager.Magnification},Converter={converter:CalculateDoubleConverter}}" VerticalAlignment="Center"  HorizontalAlignment="Center"  Style="{StaticResource btnStyle}"></Button>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
