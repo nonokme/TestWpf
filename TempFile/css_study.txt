@@ -1,0 +1,100 @@
+1.功能：负责网页中内容的布局和样式 
+2.结构：选择器{属性名1：属性值1；属性名2：属性值2；.......}
+3.位置（优先级：越靠里越优先）：
+a.内联样式表
+将样式表作为html标签中的style属性的值,只能针对一个标签有效
+如：<p style="color:red;">abc</p>
+b.内部样式表
+将样式表作为head标签的style标签的内容,可以针对当前html中所有的标签
+如：
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        p{
+            text-align: center;
+        }
+    </style>
+</head>
+c.外部样式表
+将样式表写在一个css文件中，再通过link导入,可以针对所有的html文件中的标签
+如：
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="Untitled-1.css">
+</head>
+
+Untitled-1.css文件:
+p{
+    color: red;
+}
+
+4.CSS选择器
+a.标签选择器：p{}
+b.id选择器：#xx{}
+c.类选择器：.xx{}
+d.群组选择器（混合a,b,c中所有）：p,#xx,.xx{}
+e.后迭代选择器（从前到后一层层向下找,以空格隔开）：p .xx #xx{}
+f.通配符：*{} - 选中所有的标签
+
+g.伪类选择器（为了标签的不同状态选中不同样式）：
+1.基本格式：
+普通选择器：伪类选择器
+2.用法：
+1--link - 标签的初始状态（一般作用于a标签，表示a标签中的链接没有成功访问过对应的状态）
+标签：link{} - 标签是通过各种选择器来选择的标签
+例如： a：link{}
+
+2--visited - 超链接被访问后的状态(一般作用于a标签)
+
+3--hover - 鼠标悬停在标签上的时候对应的状态
+
+4--active - 激活状态，鼠标按下还没有弹起的状态
+
+5--爱恨原则：当同一个标签需要同时给多个状态添加样式的时候，要遵守爱恨原则
+LoVeHAte 先link 再visited 再 hover 后active
+
+示例：
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style type="text/css">
+            a{
+                text-decoration: none;
+            }
+            
+            a:link{
+                color: red;
+            }
+            a:visited{
+                color: grey;
+            }
+            a:hover{
+                text-decoration: underline;
+            }
+            p:hover{
+                color: green;
+                font-size: 100px;
+                
+            }
+            p:active{
+                color: blue;
+            }
+            
+        </style>
+        
+    </head>
+    <body>
+        <a href="https://www.4399.com/" target="_blank">超链接</a>
+        <p>哈哈哈哈哈哈</p>
+    </body>
+</html>
+
+
